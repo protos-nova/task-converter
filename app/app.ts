@@ -13,7 +13,8 @@ import {ConvertService} from './convert.service';
   selector: 'app',
   pipes: [ByteFormatPipe],
   templateUrl: './app.component.partial.html',
-  providers: [HTTP_PROVIDERS, ConvertService]
+  providers: [HTTP_PROVIDERS, ConvertService],
+  styleUrls: ['styles.css']
 })
 export class App {
 
