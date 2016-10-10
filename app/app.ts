@@ -8,6 +8,7 @@ import { Http, HTTP_PROVIDERS } from '@angular/http';
 import {ByteFormatPipe} from './byte-format.pipe';
 import {ConvertService} from './convert.service';
 
+import * as fs from 'fs';
 
 @Component({
   selector: 'app',
@@ -18,11 +19,10 @@ import {ConvertService} from './convert.service';
 })
 export class App {
 
-  images: Array<Object> = [];
+  fileDrop: any = null;
+  type: string = '';
 
-  constructor(private http: Http, private convertService: ConvertService) {
-    console.log(this.convertService)
-  }
+  constructor(private http: Http, private convertService: ConvertService) { }
 
   handleDrop(e) {
     var files: File = e.dataTransfer.files;
@@ -30,34 +30,34 @@ export class App {
     var self = this;
     Object.keys(files).forEach((key) => {
       if (files[key].type === '' || files[key].type === 'application/epub+zip') {
-        this.convertService.process(files[key]);
-        self.images.push(files[key]);
+        self.fileDrop = files[key];
+
+        console.log(self.fileDrop);
+        fs.stat(self.fileDrop.path, (err, stats) => {
+          if (!err) {
+            if (stats.isDirectory()) {
+              self.type = 'folder';
+            } else if (stats.isFile) {
+              self.type = 'epub';
+            }
+          }
+        });
+
       } else {
         alert('File drop must be a EPUB or Folder!');
       }
-
     });
 
     return false;
   }
 
-  imageStats() {
+  processFile() {
+    this.convertService.process(this.fileDrop);
+  }
 
-    let sizes: Array<number> = [];
-    let totalSize: number = 0;
-
-    this
-      .images
-      .forEach((image: File) => sizes.push(image.size));
-
-    sizes
-      .forEach((size: number) => totalSize += size);
-
-    return {
-      size: totalSize,
-      count: this.images.length
-    }
-
+  clearFile() {
+    this.fileDrop = null;
+    this.type = '';
   }
 
 }
