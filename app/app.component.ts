@@ -1,9 +1,8 @@
 /// <reference path="../typings/index.d.ts" />
 
-import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Component, PipeTransform} from '@angular/core';
 import {NgFor} from '@angular/common';
-import { Http, HTTP_PROVIDERS } from '@angular/http';
+import { Http } from '@angular/http';
 
 import {ByteFormatPipe} from './byte-format.pipe';
 import {ConvertService} from './convert.service';
@@ -12,17 +11,16 @@ import * as fs from 'fs';
 
 @Component({
   selector: 'app',
-  pipes: [ByteFormatPipe],
   templateUrl: './app.component.partial.html',
-  providers: [HTTP_PROVIDERS, ConvertService],
+  providers: [ConvertService],
   styleUrls: ['styles.css']
 })
-export class App {
+export class AppComponent {
 
   fileDrop: any = null;
   type: string = '';
 
-  constructor(private http: Http, private convertService: ConvertService) { }
+  constructor(private convertService: ConvertService) { }
 
   handleDrop(e) {
     var files: File = e.dataTransfer.files;
@@ -61,5 +59,3 @@ export class App {
   }
 
 }
-
-bootstrap(App);

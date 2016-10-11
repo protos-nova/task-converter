@@ -7,7 +7,9 @@
     "experimentalDecorators": true,
     "sourceMap": true
   },
-  "files": [
-    "app/app.ts"
+  "exclude": [
+    "typings/main.d.ts",
+    "typings/main",
+    "node_modules"
   ]
 }
