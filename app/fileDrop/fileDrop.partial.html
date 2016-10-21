@@ -1,0 +1,33 @@
+<div class="col-md-12">
+	<h1></h1>
+
+	<div class="col-xs-12" *ngIf="!fileDrop">
+		<div (dragover)="false" (dragend)="false" (drop)="handleDrop($event)" class="col-xs-12 centered dropzone">
+			<p>
+				<strong>Drop Folder or Epub</strong>
+			</p>
+		</div>
+	</div>
+	<div class="col-xs-12" *ngIf="fileDrop">
+		<div class="col-xs-12">
+			<h4>{{fileDrop.name}}</h4>
+		</div>
+		<div *ngIf="type === 'folder'" class="col-xs-6">
+			<img class="img-responsive" src='./assets/folder_icon_light_blue.png'>
+		</div>
+
+	</div>
+
+
+
+	<div class="row footer-group">
+		<button (click)="clearFile()" type="button" class="btn btn-default">
+             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Clear
+        </button>
+
+		<button (click)="processFile()" [disabled]="!fileDrop" type="button" class="btn btn-default pull-right">
+              <span  class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Process
+        </button>
+	</div>
+
+</div>
