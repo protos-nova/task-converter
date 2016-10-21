@@ -11,7 +11,7 @@ import * as fs from 'fs';
     selector: 'file-drop',
     templateUrl: './fileDrop/fileDrop.partial.html',
     providers: [ConvertService],
-    styleUrls: ['styles.css']
+    styleUrls: ['./fileDrop/fileDrop.styles.css']
 })
 export class FileDropComponent {
 

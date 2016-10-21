@@ -15,6 +15,11 @@
     border: 1px solid #fff;
 }
 
+.bs-glyphicons li:hover {
+    color: #fff;
+    background-color: #563d7c;
+}
+
 .bs-glyphicons .glyphicon {
     margin-top: 5px;
     margin-bottom: 10px;

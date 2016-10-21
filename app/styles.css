@@ -1,23 +1,4 @@
-.dropzone {
-    height: 150px;
-    border: 5px dotted #ccc;
-}
 
-.dropzone p {
-    margin: 10px;
-    text-align: center
-}
-
-.footer-group {
-    padding-top: 200px;
-}
-
-.data-icon {
-    width: 100px;
-    height: 100px;
-}
-
-.bs-glyphicons-list {
-    padding-left: 0;
-    list-style: none;
+.navbar-fixed-bottom {
+    margin-bottom: 10;
 }

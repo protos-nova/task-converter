@@ -11,7 +11,8 @@ import * as fs from 'fs';
 
 @Component({
   selector: 'app',
-  templateUrl: './app.component.partial.html'
+  templateUrl: './app.component.partial.html',
+  styleUrls: ['./styles.css']
 })
 export class AppComponent {
 
