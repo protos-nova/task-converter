@@ -1,33 +1,39 @@
 <div class="col-md-12">
-	<h1></h1>
-
-	<div class="col-xs-12" *ngIf="!fileDrop">
-		<div (dragover)="false" (dragend)="false" (drop)="handleDrop($event)" class="col-xs-12 centered dropzone">
-			<p>
-				<strong>Drop Folder or Epub</strong>
-			</p>
-		</div>
-	</div>
-	<div class="col-xs-12" *ngIf="fileDrop">
-		<div class="col-xs-12">
-			<h4>{{fileDrop.name}}</h4>
-		</div>
-		<div *ngIf="type === 'folder'" class="col-xs-6">
-			<img class="img-responsive" src='./assets/folder_icon_light_blue.png'>
-		</div>
-
-	</div>
-
-
-
-	<div class="row footer-group">
-		<button (click)="clearFile()" type="button" class="btn btn-default">
+    <h1></h1>
+    <div class="col-xs-12" *ngIf="!fileDrop">
+        <div (dragover)="false" (dragend)="false" (drop)="handleDrop($event)" class="col-xs-12 centered dropzone">
+            <p>
+                <strong>Drop Folder or Epub</strong>
+            </p>
+        </div>
+    </div>
+    <div class="col-xs-12" *ngIf="fileDrop">
+        <div class="col-xs-12">
+            <h4>{{fileDrop.name}}</h4>
+        </div>
+        <div *ngIf="type.length" class="col-xs-6">
+            <img class="img-responsive" [src]="'./assets/' + type + '.png'">
+        </div>
+        <div class="col-lg-6 col-sm-6 col-12">
+            <div class="input-group">
+                <label class="input-group-btn">
+                    <label class="btn btn-default btn-file">
+                    Choose save path <input type="file" style="display: none;" value="he" name="fileList" (change)="onChange($event)" webkitdirectory directory />
+                </label>
+                </label>
+                <input type="text" class="form-control" [value]="savePath" readonly>
+            </div>
+            <span class="help-block">
+                Select the path, where you wanna save template
+            </span>
+        </div>
+    </div>
+    <div class="row footer-group">
+        <button (click)="clearFile()" type="button" class="btn btn-default">
              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Clear
         </button>
-
-		<button (click)="processFile()" [disabled]="!fileDrop" type="button" class="btn btn-default pull-right">
+        <button (click)="processFile()" [disabled]="!fileDrop" type="button" class="btn btn-default pull-right">
               <span  class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Process
         </button>
-	</div>
-
+    </div>
 </div>

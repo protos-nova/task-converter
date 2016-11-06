@@ -40,7 +40,7 @@ export class ConvertService {
                 if (stats.isDirectory()) {
                     this.convertDirectory(file.path);
                 } else if (stats.isFile) {
-
+                    console.log(stats);
                 }
             }
         });
@@ -62,7 +62,6 @@ export class ConvertService {
     }
 
     convertEpub(value: string): boolean {
-
         return true;
     }
 

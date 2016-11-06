@@ -14,15 +14,18 @@ import * as fs from 'fs';
     styleUrls: ['./fileDrop/fileDrop.styles.css']
 })
 export class FileDropComponent {
-
+    savePath: string = '';
     fileDrop: any = null;
     type: string = '';
 
     constructor(private convertService: ConvertService) { }
-
+    onChange(event) {
+        var files = event.srcElement.files;
+        this.savePath = files[0].path;
+    }
     handleDrop(e) {
         var files: File = e.dataTransfer.files;
-        var a: File = e.data
+        var a: File = e.data;
         var self = this;
         Object.keys(files).forEach((key) => {
             if (files[key].type === '' || files[key].type === 'application/epub+zip') {
@@ -34,7 +37,7 @@ export class FileDropComponent {
                         if (stats.isDirectory()) {
                             self.type = 'folder';
                         } else if (stats.isFile) {
-                            self.type = 'epub';
+                            self.type = 'book';
                         }
                     }
                 });
