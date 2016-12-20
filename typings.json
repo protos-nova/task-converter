@@ -1,6 +1,7 @@
 {
   "globalDependencies": {
     "app-root-path": "registry:dt/app-root-path#1.2.1+20160719232327",
+    "epub": "registry:dt/epub#0.0.0+20160810142048",
     "node": "registry:dt/node#6.0.0+20161008175459",
     "recursive-readdir": "registry:dt/recursive-readdir#1.2.1+20160317120654"
   }

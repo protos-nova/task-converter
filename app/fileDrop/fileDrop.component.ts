@@ -7,6 +7,7 @@ import {ConvertService} from '../convert.service';
 
 import * as fs from 'fs';
 
+
 @Component({
     selector: 'file-drop',
     templateUrl: './fileDrop/fileDrop.partial.html',
@@ -31,7 +32,6 @@ export class FileDropComponent {
             if (files[key].type === '' || files[key].type === 'application/epub+zip') {
                 self.fileDrop = files[key];
 
-                console.log(self.fileDrop);
                 fs.stat(self.fileDrop.path, (err, stats) => {
                     if (!err) {
                         if (stats.isDirectory()) {

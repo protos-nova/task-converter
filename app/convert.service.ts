@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-
-
 import * as fs from 'fs';
 import * as path from 'path';
 
+
+const EPub = require("epub");
 const json2csv = require('json2csv');
 
 interface ITaskLine {
@@ -40,7 +40,11 @@ export class ConvertService {
                 if (stats.isDirectory()) {
                     this.convertDirectory(file.path);
                 } else if (stats.isFile) {
-                    console.log(stats);
+                    switch (file.type) {
+                        case 'application/epub+zip':
+                            this.convertEpub(file.path);
+                            break;
+                    }
                 }
             }
         });
@@ -61,7 +65,19 @@ export class ConvertService {
         return true;
     }
 
-    convertEpub(value: string): boolean {
+    convertEpub(path: string): boolean {
+
+        var epub = new EPub(path);
+
+        epub.on("end", function () {
+            epub.flow.forEach(function (chapter) {
+                console.log(chapter.id);
+            });
+            epub.getChapter(1, function (err, text) { });
+        });
+
+        epub.parse();
+
         return true;
     }
 
