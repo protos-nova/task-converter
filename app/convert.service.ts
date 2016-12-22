@@ -19,6 +19,16 @@ interface ITaskLine {
     TIMEZONE: string;
 }
 
+interface ItocItem {
+    href: string;
+    id: string;
+    level: number;
+    order: number;
+    properties: string;
+    title: string;
+}
+
+
 @Injectable()
 export class ConvertService {
     private indent: number = 1;
@@ -54,8 +64,7 @@ export class ConvertService {
 
         this.recursiveRead(path, (err, results, lines: ITaskLine[]) => {
             if (err) throw err;
-            console.log(lines);
-            var csv = json2csv({ data: lines, fields: this.fields });
+            let csv = json2csv({ data: lines, fields: this.fields });
             fs.writeFile('file.csv', csv, function (err) {
                 if (err) throw err;
                 console.log('file saved');
@@ -69,16 +78,37 @@ export class ConvertService {
 
         var epub = new EPub(path);
 
-        epub.on("end", function () {
-            epub.flow.forEach(function (chapter) {
-                console.log(chapter.id);
+        epub.on('end', () => {
+            let lines: ITaskLine[] = this.bookConvert(epub.toc);
+            let csv = json2csv({ data: lines, fields: this.fields });
+            fs.writeFile('file.csv', csv, function (err) {
+                if (err) throw err;
+                console.log('file saved');
             });
-            epub.getChapter(1, function (err, text) { });
         });
 
         epub.parse();
 
         return true;
+    }
+
+    bookConvert(tocArr: ItocItem[]): ITaskLine[] {
+        let lines: ITaskLine[] = [];
+        tocArr.forEach((e) => {
+            lines.push({
+                CONTENT: e.title,
+                INDENT: e.level,
+                PRIORITY: 4,
+                TYPE: 'task',
+                AUTHOR: 0,
+                RESPONSIBLE: 0,
+                DATE: '',
+                DATE_LANG: 'en',
+                TIMEZONE: ''
+            })
+        });
+
+        return lines;
     }
 
     recursiveRead(dir, done) {
