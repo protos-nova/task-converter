@@ -32,7 +32,7 @@
         <button (click)="clearFile()" type="button" class="btn btn-default">
              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Clear
         </button>
-        <button (click)="processFile()" [disabled]="!fileDrop" type="button" class="btn btn-default pull-right">
+        <button (click)="processFile()" [disabled]="!fileDrop || !savePath.length" type="button" class="btn btn-default pull-right">
               <span  class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Process
         </button>
     </div>
