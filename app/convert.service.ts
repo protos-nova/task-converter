@@ -32,6 +32,7 @@ interface ItocItem {
 @Injectable()
 export class ConvertService {
     private indent: number = 1;
+    private savePath: string;
     private fields = [
         'CONTENT',
         'INDENT',
@@ -44,7 +45,8 @@ export class ConvertService {
         'TIMEZONE'
     ];
 
-    process(file: any) {
+    process(file: any, path: string) {
+        this.savePath = path;
         fs.stat(file.path, (err, stats) => {
             if (!err) {
                 if (stats.isDirectory()) {
@@ -65,7 +67,7 @@ export class ConvertService {
         this.recursiveRead(path, (err, results, lines: ITaskLine[]) => {
             if (err) throw err;
             let csv = json2csv({ data: lines, fields: this.fields });
-            fs.writeFile('file.csv', csv, function (err) {
+            fs.writeFile(this.savePath + '/template.csv', csv, function (err) {
                 if (err) throw err;
                 console.log('file saved');
             });
@@ -81,7 +83,7 @@ export class ConvertService {
         epub.on('end', () => {
             let lines: ITaskLine[] = this.bookConvert(epub.toc);
             let csv = json2csv({ data: lines, fields: this.fields });
-            fs.writeFile('file.csv', csv, function (err) {
+            fs.writeFile(this.savePath + '/template.csv', csv, function (err) {
                 if (err) throw err;
                 console.log('file saved');
             });

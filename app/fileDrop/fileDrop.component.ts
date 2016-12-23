@@ -51,7 +51,7 @@ export class FileDropComponent {
     }
 
     processFile() {
-        this.convertService.process(this.fileDrop);
+        this.convertService.process(this.fileDrop, this.savePath);
     }
 
     clearFile() {
