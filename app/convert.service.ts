@@ -51,7 +51,7 @@ export class ConvertService {
         fs.stat(file.path, (err, stats) => {
             if (!err) {
                 if (stats.isDirectory()) {
-                    this.convertDirectory(file.path);
+                    this.convertDirectory(file.path, file.name);
                 } else if (stats.isFile) {
                     switch (file.type) {
                         case 'application/epub+zip':
@@ -63,11 +63,23 @@ export class ConvertService {
         });
     }
 
-    convertDirectory(path: string): boolean {
+    convertDirectory(path: string, name: string): boolean {
 
         this.recursiveRead(path, (err, results, lines: ITaskLine[]) => {
             if (err) throw err;
-            let csv = json2csv({ data: lines, fields: this.fields });
+            let csv = json2csv({
+                data: this.wrapInTask ? [{
+                    CONTENT: name,
+                    INDENT: 0,
+                    PRIORITY: 4,
+                    TYPE: 'task',
+                    AUTHOR: 0,
+                    RESPONSIBLE: 0,
+                    DATE: '',
+                    DATE_LANG: 'en',
+                    TIMEZONE: ''
+                }].concat(lines) : lines, fields: this.fields
+            });
             fs.writeFile(this.savePath + '/template.csv', csv, function (err) {
                 if (err) throw err;
                 console.log('file saved');
@@ -126,7 +138,7 @@ export class ConvertService {
     }
 
     recursiveRead(dir, done) {
-        let that = this;
+        let self = this;
         let results = [];
         let lines = [];
         fs.readdir(dir, (err, list) => {
@@ -135,12 +147,12 @@ export class ConvertService {
             (function next() {
                 let file = list[i++];
                 if (!file) {
-                    that.indent = 1;
+                    self.indent = 1;
                     return done(null, results, lines);
                 }
                 let line: ITaskLine = {
                     CONTENT: file,
-                    INDENT: that.indent,
+                    INDENT: self.wrapInTask ? self.indent + 1 : self.indent,
                     PRIORITY: 4,
                     TYPE: 'task',
                     AUTHOR: 0,
@@ -153,8 +165,8 @@ export class ConvertService {
                 file = dir + '/' + file;
                 fs.stat(file, (err, stat) => {
                     if (stat && stat.isDirectory()) {
-                        that.indent++;
-                        that.recursiveRead(file, (err, res, lns) => {
+                        self.indent++;
+                        self.recursiveRead(file, (err, res, lns) => {
                             results = results.concat(res);
                             lines = lines.concat(lns);
                             next();
