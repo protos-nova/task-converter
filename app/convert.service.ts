@@ -33,6 +33,7 @@ interface ItocItem {
 export class ConvertService {
     private indent: number = 1;
     private savePath: string;
+    public wrapInTask: boolean = true;
     private fields = [
         'CONTENT',
         'INDENT',
@@ -81,7 +82,7 @@ export class ConvertService {
         var epub = new EPub(path);
 
         epub.on('end', () => {
-            let lines: ITaskLine[] = this.bookConvert(epub.toc);
+            let lines: ITaskLine[] = this.bookConvert(epub.toc, epub.filename);
             let csv = json2csv({ data: lines, fields: this.fields });
             fs.writeFile(this.savePath + '/template.csv', csv, function (err) {
                 if (err) throw err;
@@ -94,12 +95,23 @@ export class ConvertService {
         return true;
     }
 
-    bookConvert(tocArr: ItocItem[]): ITaskLine[] {
-        let lines: ITaskLine[] = [];
+    bookConvert(tocArr: ItocItem[], name: string): ITaskLine[] {
+        let lines: ITaskLine[] = this.wrapInTask ? [{
+            CONTENT: name,
+            INDENT: 0,
+            PRIORITY: 4,
+            TYPE: 'task',
+            AUTHOR: 0,
+            RESPONSIBLE: 0,
+            DATE: '',
+            DATE_LANG: 'en',
+            TIMEZONE: ''
+        }] : [];
+
         tocArr.forEach((e) => {
             lines.push({
                 CONTENT: e.title,
-                INDENT: e.level,
+                INDENT: this.wrapInTask ? e.level + 1 : e.level,
                 PRIORITY: 4,
                 TYPE: 'task',
                 AUTHOR: 0,

@@ -1,7 +1,7 @@
 
 import {Component, PipeTransform} from '@angular/core';
-import {NgFor} from '@angular/common';
 import {Http} from '@angular/http';
+
 
 import {ConvertService} from '../convert.service';
 
@@ -20,6 +20,7 @@ export class FileDropComponent {
     type: string = '';
 
     constructor(private convertService: ConvertService) { }
+
     onChange(event) {
         var files = event.srcElement.files;
         this.savePath = files[0].path;
@@ -55,6 +56,7 @@ export class FileDropComponent {
     }
 
     clearFile() {
+        this.savePath = '';
         this.fileDrop = null;
         this.type = '';
     }

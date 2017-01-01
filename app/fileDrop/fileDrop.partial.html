@@ -23,9 +23,11 @@
                 </label>
                 <input type="text" class="form-control" [value]="savePath" readonly>
             </div>
-            <span class="help-block">
-                Select the path, where you wanna save template
-            </span>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" [(ngModel)]="convertService.wrapInTask"> Wrap in task
+                </label>
+            </div>
         </div>
     </div>
     <div class="row footer-group">

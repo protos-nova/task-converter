@@ -1,5 +1,6 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import {AppComponent} from './app.component';
 import {FileDropComponent} from './fileDrop/fileDrop.component';
@@ -17,7 +18,7 @@ import { HttpModule } from '@angular/http';
 @NgModule({
     imports: [
         BrowserModule,
-        // FormsModule,
+        FormsModule,
         RouterModule.forRoot([
             { path: 'iterative', component: IterativeComponent },
             { path: 'filedrop', component: FileDropComponent },
@@ -29,7 +30,6 @@ import { HttpModule } from '@angular/http';
         FileDropComponent,
         HomeComponent,
         IterativeComponent
-        // HeroDetailComponent
     ],
     bootstrap: [AppComponent]
 })
