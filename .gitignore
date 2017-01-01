@@ -4,5 +4,6 @@ build
 npm-debug.log
 typings
 /data
+/build
 .history
 /task-converter-*

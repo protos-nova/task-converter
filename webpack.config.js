@@ -16,7 +16,7 @@ module.exports = {
   },
 
   output: {
-    path: __dirname + '/build/',
+    path: __dirname + '/app/build/',
     publicPath: 'build/',
     filename: '[name].js',
     sourceMapFilename: '[name].js.map',

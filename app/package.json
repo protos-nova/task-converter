@@ -1,5 +1,6 @@
 {
-  "name": "image-size-calculator-app",
+  "name": "task-converter",
   "version": "0.0.1",
-  "main": "main.js"
+  "description": "",
+  "main": "./main.js"
 }
