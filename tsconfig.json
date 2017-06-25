@@ -1,15 +1,23 @@
 {
-  "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true
-  },
-  "exclude": [
-    "typings/main.d.ts",
-    "typings/main",
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "types": [
+            // add node as an option
+            "node"
+        ],
+        "typeRoots": [
+            // add path to @types
+            "node_modules/@types"
+        ]
+    },
+    "exclude": [
+        "typings/main.d.ts",
+        "typings/main",
+        "node_modules"
+    ]
 }

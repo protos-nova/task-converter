@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 
 import * as fs from 'fs';
 import * as path from 'path';
+// import Epub from 'epub.js';
 
-
-const EPub = require("epub");
 const json2csv = require('json2csv');
+const Epub = window['ePub'];
+
 
 interface ITaskLine {
     CONTENT: string;
@@ -28,11 +29,22 @@ interface ItocItem {
     title: string;
 }
 
+interface Itoc {
+    cfi: string,
+    href: string,
+    id: string,
+    label: string,
+    parent: string,
+    spinePos: number,
+    subitems: Itoc[]
+}
+
 
 @Injectable()
 export class ConvertService {
     private indent: number = 1;
     private savePath: string;
+    private localLines: ITaskLine[] = [];
     public wrapInTask: boolean = true;
     private fields = [
         'CONTENT',
@@ -80,7 +92,7 @@ export class ConvertService {
                     TIMEZONE: ''
                 }].concat(lines) : lines, fields: this.fields
             });
-            fs.writeFile(this.savePath + '/template.csv', csv, function (err) {
+            fs.writeFile(this.savePath + '/template.csv', csv, function(err) {
                 if (err) throw err;
                 console.log('file saved');
             });
@@ -91,23 +103,25 @@ export class ConvertService {
 
     convertEpub(path: string): boolean {
 
-        var epub = new EPub(path);
-
-        epub.on('end', () => {
-            let lines: ITaskLine[] = this.bookConvert(epub.toc, epub.filename);
+        var epub = new Epub(path);
+        console.log(epub);
+        epub.on('book:ready', () => {
+            let lines: ITaskLine[] = this.bookConvert(epub.toc, epub.metadata.bookTitle);
             let csv = json2csv({ data: lines, fields: this.fields });
-            fs.writeFile(this.savePath + '/template.csv', csv, function (err) {
+            fs.writeFile(this.savePath + '/template.csv', csv, function(err) {
                 if (err) throw err;
                 console.log('file saved');
             });
         });
 
-        epub.parse();
+        // epub.parse();
 
         return true;
     }
 
-    bookConvert(tocArr: ItocItem[], name: string): ITaskLine[] {
+    bookConvert(tocArr: Itoc[], name: string): ITaskLine[] {
+        let self = this;
+
         let lines: ITaskLine[] = this.wrapInTask ? [{
             CONTENT: name,
             INDENT: 0,
@@ -120,10 +134,10 @@ export class ConvertService {
             TIMEZONE: ''
         }] : [];
 
-        tocArr.forEach((e) => {
+        const recursiveTask = (toc: Itoc, indent: number) => {
             lines.push({
-                CONTENT: e.title,
-                INDENT: this.wrapInTask ? e.level + 1 : e.level,
+                CONTENT: toc.label.replace(/\n|\r/g, ""),
+                INDENT: indent,
                 PRIORITY: 4,
                 TYPE: 'task',
                 AUTHOR: 0,
@@ -131,9 +145,16 @@ export class ConvertService {
                 DATE: '',
                 DATE_LANG: 'en',
                 TIMEZONE: ''
-            })
-        });
+            });
 
+            toc.subitems && toc.subitems.forEach((e) => {
+                recursiveTask(e, indent + 1);
+            });
+        }
+
+        tocArr.forEach(element => {
+            recursiveTask(element, 1);
+        });
         return lines;
     }
 

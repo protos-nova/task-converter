@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import { Component, PipeTransform } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { Http } from '@angular/http';
