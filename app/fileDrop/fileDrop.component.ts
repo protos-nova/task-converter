@@ -1,11 +1,11 @@
 
-import {Component, PipeTransform} from '@angular/core';
-import {Http} from '@angular/http';
-
-
-import {ConvertService} from '../convert.service';
-
+import { Component, PipeTransform, ChangeDetectorRef } from '@angular/core';
+import { Http } from '@angular/http';
 import * as fs from 'fs';
+
+
+import { ConvertService } from '../convert.service';
+
 
 
 @Component({
@@ -19,7 +19,7 @@ export class FileDropComponent {
     fileDrop: any = null;
     type: string = '';
 
-    constructor(private convertService: ConvertService) { }
+    constructor(private cd: ChangeDetectorRef, private convertService: ConvertService) { }
 
     onChange(event) {
         var files = event.srcElement.files;
@@ -40,6 +40,7 @@ export class FileDropComponent {
                         } else if (stats.isFile) {
                             self.type = 'book';
                         }
+                        this.cd.detectChanges();
                     }
                 });
 

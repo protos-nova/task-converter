@@ -114,8 +114,6 @@ export class ConvertService {
             });
         });
 
-        // epub.parse();
-
         return true;
     }
 

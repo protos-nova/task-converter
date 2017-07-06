@@ -1,11 +1,12 @@
-import { NgModule }      from '@angular/core';
+import { TruncatePipe } from './shared/pipes/truncate.pipe';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
-import {AppComponent} from './app.component';
-import {FileDropComponent} from './fileDrop/fileDrop.component';
-import {IterativeComponent} from './iterative/iterative.component';
-import {HomeComponent} from './home/home.component';
+import { AppComponent } from './app.component';
+import { FileDropComponent } from './fileDrop/fileDrop.component';
+import { IterativeComponent } from './iterative/iterative.component';
+import { HomeComponent } from './home/home.component';
 
 
 import { enableProdMode, Component } from '@angular/core';
@@ -19,18 +20,22 @@ import { HttpModule } from '@angular/http';
     imports: [
         BrowserModule,
         FormsModule,
+        // PipeModule.forRoot(),
         RouterModule.forRoot([
             { path: 'iterative', component: IterativeComponent },
             { path: 'filedrop', component: FileDropComponent },
-            { path: '', component: HomeComponent }
+            { path: '', component: FileDropComponent }
         ], { useHash: true })
     ],
     declarations: [
         AppComponent,
         FileDropComponent,
         HomeComponent,
-        IterativeComponent
+        IterativeComponent,
+        TruncatePipe,
     ],
+    exports: [TruncatePipe],
+    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -4,7 +4,7 @@
   "description": "",
   "main": "./app/main.js",
   "scripts": {
-    "package-mac": "npm run build && electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --prune=true --out=release-builds",
+    "package-mac": "npm run build && electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --prune=true --out=release-builds --icon=launcher.icns",
     "package-windows": "npm run build-electron && electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds",
     "package-linux": "npm run build-electron && electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds",
     "create-installer-mac": "electron-installer-dmg ./release-builds/task-converter-darwin-x64/task-converter.app task-converter-app --out=release-builds --overwrite",
