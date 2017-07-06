@@ -1,11 +1,11 @@
 <div class="col-md-12">
-    <div class="header">
+       <div class="header">
         <div *ngIf="!fileDrop; else elseTemplate">
-            <h2>Drop here</h2>
+            <h3>Drop here</h3>
             <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
         </div>
         <ng-template #elseTemplate>
-            <h2>{{fileDrop.name | truncate : 60}}</h2>
+            <h4>{{fileDrop.name | truncate : 37}}</h4>
         </ng-template>
     </div>
     <div class="col-xs-12" *ngIf="!fileDrop">
