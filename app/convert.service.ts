@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 
 import * as fs from 'fs';
 import * as path from 'path';
-// import Epub from 'epub.js';
 
+
+const { dialog } = require("electron").remote;
 const json2csv = require('json2csv');
 const Epub = window['ePub'];
-
 
 interface ITaskLine {
     CONTENT: string;
@@ -43,7 +43,6 @@ interface Itoc {
 @Injectable()
 export class ConvertService {
     private indent: number = 1;
-    private savePath: string;
     private localLines: ITaskLine[] = [];
     public wrapInTask: boolean = true;
     private fields = [
@@ -58,8 +57,7 @@ export class ConvertService {
         'TIMEZONE'
     ];
 
-    process(file: any, path: string) {
-        this.savePath = path;
+    process(file: any) {
         fs.stat(file.path, (err, stats) => {
             if (!err) {
                 if (stats.isDirectory()) {
@@ -92,29 +90,48 @@ export class ConvertService {
                     TIMEZONE: ''
                 }].concat(lines) : lines, fields: this.fields
             });
-            fs.writeFile(this.savePath + '/template.csv', csv, function(err) {
-                if (err) throw err;
-                console.log('file saved');
-            });
+            this.writeFile(csv, name);
         });
 
         return true;
     }
 
     convertEpub(path: string): boolean {
-
-        var epub = new Epub(path);
-        console.log(epub);
+        let epub = new Epub(path);
         epub.on('book:ready', () => {
             let lines: ITaskLine[] = this.bookConvert(epub.toc, epub.metadata.bookTitle);
             let csv = json2csv({ data: lines, fields: this.fields });
-            fs.writeFile(this.savePath + '/template.csv', csv, function(err) {
-                if (err) throw err;
-                console.log('file saved');
-            });
+            this.writeFile(csv, epub.metadata.bookTitle);
         });
 
         return true;
+    }
+
+    writeFile(file, name?: string) {
+        dialog.showSaveDialog({
+            defaultPath: name + '.csv' || 'template.csv'
+        }, fileName => {
+            console.log(fileName);
+            if (fileName === undefined) {
+                console.log("You didn't save the file");
+                return;
+            }
+
+            // fileName is a string that contains the path and filename created in the save file dialog.
+            fs.writeFile(fileName, file, (err) => {
+                if (err) {
+                    dialog.showMessageBox({ type: 'error', message: 'An error ocurred creating the file ' + err.message }, btnIndex => { });
+                }
+                dialog.showMessageBox(
+                    {
+                        type: 'info',
+                        title: 'Template saved!',
+                        message: `Your task tempalate was successfully saved! \n\nNow you can import it to your Todoist.`
+                    }, (buttonIndex) => {
+                        // updateFooter("Exit: " + buttons[buttonIndex]);
+                    });
+            });
+        });
     }
 
     bookConvert(tocArr: Itoc[], name: string): ITaskLine[] {

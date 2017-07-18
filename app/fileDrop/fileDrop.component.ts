@@ -15,16 +15,11 @@ import { ConvertService } from '../convert.service';
     styleUrls: ['./fileDrop/fileDrop.styles.css']
 })
 export class FileDropComponent {
-    savePath: string = '';
     fileDrop: any = null;
     type: string = '';
 
     constructor(private cd: ChangeDetectorRef, private convertService: ConvertService) { }
 
-    onChange(event) {
-        var files = event.srcElement.files;
-        this.savePath = files[0].path;
-    }
     handleDrop(e) {
         var files: File = e.dataTransfer.files;
         var a: File = e.data;
@@ -40,6 +35,7 @@ export class FileDropComponent {
                         } else if (stats.isFile) {
                             self.type = 'book';
                         }
+                        this.processFile()
                         this.cd.detectChanges();
                     }
                 });
@@ -53,13 +49,7 @@ export class FileDropComponent {
     }
 
     processFile() {
-        this.convertService.process(this.fileDrop, this.savePath);
-    }
-
-    clearFile() {
-        this.savePath = '';
-        this.fileDrop = null;
-        this.type = '';
+        this.convertService.process(this.fileDrop);
     }
 
 }
