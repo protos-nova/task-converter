@@ -1,15 +1,12 @@
-<div class="col-md-12">
-       <div class="header">
-        <div *ngIf="!fileDrop; else elseTemplate">
+<div class="col-md-12" (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
+    <div class="header">
+        <div>
             <h3>Drop here</h3>
             <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
         </div>
-        <ng-template #elseTemplate>
-            <h4>{{fileDrop.name | truncate : 37}}</h4>
-        </ng-template>
     </div>
-    <div class="col-xs-12" *ngIf="!fileDrop">
-        <div (dragover)="false" (dragend)="false" (drop)="handleDrop($event)" class="col-xs-12 centered dropzone">
+    <div class="col-xs-12">
+        <div  class="col-xs-12 centered dropzone">
             <div class="bs-glyphicons blackout">
                 <ul class="bs-glyphicons-list">
                     <li>
@@ -24,45 +21,6 @@
                 </ul>
 
             </div>
-
         </div>
     </div>
-    <div *ngIf="fileDrop">
-        <div *ngIf="type.length" class="row">
-            <img class="img-responsive" [src]="'./assets/' + type + '.png'">
-        </div>
-        <div class="row">
-            <div class="input-group">
-                <label class="input-group-btn">
-                    <label class="btn btn-default btn-file">
-                    Save to:
-                    <!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
-                    <input
-                        type="file"
-                        style="display: none;"
-                        value="he"
-                        name="fileList"
-                        (change)="onChange($event)"
-                        webkitdirectory
-                        directory />
-                </label>
-                </label>
-                <input type="text" class="form-control" [value]="savePath" readonly>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" [(ngModel)]="convertService.wrapInTask"> Wrap in task
-                </label>
-            </div>
-        </div>
-    </div>
-
-</div>
-<div class="footer-group" *ngIf="fileDrop">
-    <button (click)="clearFile()" type="button" class="btn btn-default">
-             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Clear
-        </button>
-    <button (click)="processFile()" [disabled]="!fileDrop || !savePath.length" type="button" class="btn btn-default pull-right">
-        <span  class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Process
-    </button>
 </div>
