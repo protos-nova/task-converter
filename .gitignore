@@ -8,3 +8,4 @@ typings
 /release-builds
 .history
 /task-converter-*
+.vscode
